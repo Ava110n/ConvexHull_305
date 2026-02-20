@@ -52,6 +52,7 @@ fun App() {
             drawPoints(points)
             if(points.size >= 2){
                 val convex_hull = convex_hull_of_points(points)
+                //drawConvexHull(convex_hull)
             }
         }
     }
@@ -75,11 +76,12 @@ fun convex_hull_of_points(points: SnapshotStateList<Offset>): List<Offset>{
         val cur_point = convex_hull.last()
         val prev_point : Offset
 
-        if(convex_hull.size < 2) prev_point = Offset(cur_point.x, cur_point.y + 1)
-        else prev_point = convex_hull[convex_hull.size -2]
+        if(convex_hull.size < 2) prev_point = Offset(cur_point.x, cur_point.y + 100)
+        else prev_point = convex_hull[convex_hull.size - 2]
 
         var next_point = prev_point
         for(point in points){
+            if(point == cur_point) continue
             //ищем ту точку, у которой угол отклонения от предыдущей прямой наибольшей
             if(angle(prev_point, cur_point, next_point) <
                 angle(prev_point, cur_point, point)) next_point = point
@@ -112,7 +114,7 @@ fun angle(a:Offset, b: Offset, c: Offset):Float{
     return acos((
             pow(dist(a,b))+pow(dist(b,c))-
                 pow(dist(a,c)))/
-                    2*dist(a,b)*dist(b,c)
+            (2*dist(a,b)*dist(b,c))
     )
 }
 fun pow(x: Float, n: Int = 2) = x*x
